@@ -1768,8 +1768,8 @@ public class ContactAggregator {
                         + Contacts.STARRED + "=?, "
                         + Contacts.HAS_PHONE_NUMBER + "=?, "
                         + Contacts.LOOKUP_KEY + "=?, "
-                        + Contacts.CUSTOM_VIBRATION + "=? "
-                        + Contacts.CUSTOM_NOTIFICATION + "=?, " +
+                        + Contacts.CUSTOM_VIBRATION + "=?, "
+                        + Contacts.CUSTOM_NOTIFICATION + "=? " +
                 " WHERE " + Contacts._ID + "=?";
 
         String INSERT_SQL =
