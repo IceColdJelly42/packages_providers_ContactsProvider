@@ -950,7 +950,6 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                 Contacts.PHOTO_ID + " INTEGER REFERENCES data(_id)," +
                 Contacts.PHOTO_FILE_ID + " INTEGER REFERENCES photo_files(_id)," +
                 Contacts.CUSTOM_RINGTONE + " TEXT," +
-                Contacts.CUSTOM_NOTIFICATION + " TEXT," +
                 Contacts.SEND_TO_VOICEMAIL + " INTEGER NOT NULL DEFAULT 0," +
                 Contacts.TIMES_CONTACTED + " INTEGER NOT NULL DEFAULT 0," +
                 Contacts.LAST_TIME_CONTACTED + " INTEGER," +
@@ -958,7 +957,8 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                 Contacts.HAS_PHONE_NUMBER + " INTEGER NOT NULL DEFAULT 0," +
                 Contacts.LOOKUP_KEY + " TEXT," +
                 ContactsColumns.LAST_STATUS_UPDATE_ID + " INTEGER REFERENCES data(_id), " +
-                Contacts.CUSTOM_VIBRATION + " TEXT" +
+                Contacts.CUSTOM_VIBRATION + " TEXT," +
+                Contacts.CUSTOM_NOTIFICATION + " TEXT" +
         ");");
 
         db.execSQL("CREATE INDEX contacts_has_phone_index ON " + Tables.CONTACTS + " (" +
@@ -984,7 +984,6 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                         RawContacts.AGGREGATION_MODE_DEFAULT + "," +
                 RawContactsColumns.AGGREGATION_NEEDED + " INTEGER NOT NULL DEFAULT 1," +
                 RawContacts.CUSTOM_RINGTONE + " TEXT," +
-                RawContacts.CUSTOM_NOTIFICATION + " TEXT," +
                 RawContacts.SEND_TO_VOICEMAIL + " INTEGER NOT NULL DEFAULT 0," +
                 RawContacts.TIMES_CONTACTED + " INTEGER NOT NULL DEFAULT 0," +
                 RawContacts.LAST_TIME_CONTACTED + " INTEGER," +
@@ -1005,6 +1004,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                 RawContacts.SYNC3 + " TEXT, " +
                 RawContacts.SYNC4 + " TEXT, " +
                 RawContacts.CUSTOM_VIBRATION + " TEXT, " +
+                RawContacts.CUSTOM_NOTIFICATION + " TEXT " +
                 RawContacts.IS_RESTRICTED + " INTEGER " +
         ");");
 
@@ -1592,7 +1592,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                 + RawContactsColumns.CONCRETE_SYNC2 + " AS " + RawContacts.SYNC2 + ","
                 + RawContactsColumns.CONCRETE_SYNC3 + " AS " + RawContacts.SYNC3 + ","
                 + RawContactsColumns.CONCRETE_SYNC4 + " AS " + RawContacts.SYNC4 + ","
-                + RawContactsColumns.CONCRETE_IS_RESTRICTED + " AS " + RawContacts.IS_RESTRICTED;;
+                + RawContactsColumns.CONCRETE_IS_RESTRICTED + " AS " + RawContacts.IS_RESTRICTED;
 
         String baseContactColumns =
                 Contacts.HAS_PHONE_NUMBER + ", "
@@ -2433,8 +2433,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 708) {
             upgradeToVersion708(db);
-            upgradeViewsAndTriggers = true;
-            rebuildSqliteStats = true;
+            upgradeViewsAndTriggers = true; 
             oldVersion = 708;
         }
 
@@ -3846,27 +3845,28 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
     private void upgradeToVersion706(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE contacts ADD custom_vibration TEXT DEFAULT NULL;");
         db.execSQL("ALTER TABLE raw_contacts ADD custom_vibration TEXT DEFAULT NULL;");
-
+        
         db.execSQL(
                 "UPDATE " + Tables.CONTACTS +
                 "   SET " + Contacts.CUSTOM_VIBRATION + "=NULL" +
                 " WHERE " + Contacts._ID + " NOT NULL");
-
+        
         db.execSQL(
                 "UPDATE " + Tables.RAW_CONTACTS +
                 "   SET " + RawContacts.CUSTOM_VIBRATION + "=NULL" +
                 " WHERE " + RawContacts._ID + " NOT NULL");
     }
 
+    /* add custom notifications */
     private void upgradeToVersion708(SQLiteDatabase db) {
-        db.execSQL("ALTER TABLE contacts ADD custom_vibration TEXT DEFAULT NULL;");
-        db.execSQL("ALTER TABLE raw_contacts ADD custom_vibration TEXT DEFAULT NULL;");
-
+        db.execSQL("ALTER TABLE contacts ADD custom_notification TEXT DEFAULT NULL;");
+        db.execSQL("ALTER TABLE raw_contacts ADD custom_notification TEXT DEFAULT NULL;");
+        
         db.execSQL(
                 "UPDATE " + Tables.CONTACTS +
                 "   SET " + Contacts.CUSTOM_NOTIFICATION + "=NULL" +
                 " WHERE " + Contacts._ID + " NOT NULL");
-
+        
         db.execSQL(
                 "UPDATE " + Tables.RAW_CONTACTS +
                 "   SET " + RawContacts.CUSTOM_NOTIFICATION + "=NULL" +
