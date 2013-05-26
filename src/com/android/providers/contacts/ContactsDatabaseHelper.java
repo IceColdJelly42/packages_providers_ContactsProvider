@@ -1004,7 +1004,7 @@ public class ContactsDatabaseHelper extends SQLiteOpenHelper {
                 RawContacts.SYNC3 + " TEXT, " +
                 RawContacts.SYNC4 + " TEXT, " +
                 RawContacts.CUSTOM_VIBRATION + " TEXT, " +
-                RawContacts.CUSTOM_NOTIFICATION + " TEXT " +
+                RawContacts.CUSTOM_NOTIFICATION + " TEXT, " +
                 RawContacts.IS_RESTRICTED + " INTEGER " +
         ");");
 
